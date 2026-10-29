@@ -1,1 +1,2 @@
-export {}
+// 生成id
+export * from '@/uuid'
