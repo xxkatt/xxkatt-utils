@@ -6,6 +6,7 @@
 
 - `xxkatt-utils` 是按语言分区的工具库 monorepo，目前先维护前端工具库。
 - 前端包放在 `packages/js/*`，由 pnpm workspace 管理。
+- 应用放在 `apps/*`；`apps/docs` 对应文档站 `@xxkatt/docs`，由包内管理 VitePress 依赖和脚本。
 - `packages/js/tsconfig.base.json` 是前端共享 TypeScript 配置，不是独立包。
 - 当前 `packages/js/utils` 对应 `@xxkatt/utils`，仅有空入口，尚无工具函数。
 - 后续其他语言使用 `packages/<语言>` 分区，按实际需要引入各自工具链。

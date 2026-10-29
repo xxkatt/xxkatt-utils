@@ -12,24 +12,29 @@ describe('uuid', () => {
   })
 
   it('支持标准带横杠的 UUID v4', () => {
-    expect(uuid(true)).toMatch(
+    expect(uuid('', true)).toMatch(
       /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
     )
   })
 
-  it.each<[boolean | undefined, string | undefined, string]>([
+  it('支持仅传入前缀', () => {
+    expect(uuid('user_')).toMatch(/^user_[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}$/)
+  })
+
+  it.each<[string | undefined, boolean | undefined, string]>([
     [undefined, undefined, '00112233445546778899aabbccddeeff'],
-    [false, undefined, '00112233445546778899aabbccddeeff'],
-    [false, 'user_', 'user_00112233445546778899aabbccddeeff'],
-    [false, 'user', 'user00112233445546778899aabbccddeeff'],
-    [undefined, 'user_', 'user_00112233445546778899aabbccddeeff'],
-    [true, '', '00112233-4455-4677-8899-aabbccddeeff'],
-    [true, 'user_', 'user_00112233-4455-4677-8899-aabbccddeeff'],
-  ])('传入 %s、%s 时保留格式并原样拼接前缀', (hyphens, prefix, expected) => {
+    [undefined, false, '00112233445546778899aabbccddeeff'],
+    ['user_', false, 'user_00112233445546778899aabbccddeeff'],
+    ['user', false, 'user00112233445546778899aabbccddeeff'],
+    ['user_', undefined, 'user_00112233445546778899aabbccddeeff'],
+    ['', true, '00112233-4455-4677-8899-aabbccddeeff'],
+    [undefined, true, '00112233-4455-4677-8899-aabbccddeeff'],
+    ['user_', true, 'user_00112233-4455-4677-8899-aabbccddeeff'],
+  ])('传入 %s、%s 时保留格式并原样拼接前缀', (prefix, hyphens, expected) => {
     vi.spyOn(globalThis.crypto, 'randomUUID').mockReturnValue(
       '00112233-4455-4677-8899-aabbccddeeff',
     )
-    expect(uuid(hyphens, prefix)).toBe(expected)
+    expect(uuid(prefix, hyphens)).toBe(expected)
   })
 })
 

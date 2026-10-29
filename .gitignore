@@ -4,6 +4,7 @@ node_modules/
 .pnpm-store/
 dist/
 coverage/
+apps/docs/.vitepress/cache/
 *.tsbuildinfo
 *.log
 .env

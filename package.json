@@ -2,6 +2,9 @@
   "name": "xxkatt-utils",
   "private": true,
   "scripts": {
+    "docs:dev": "pnpm --filter @xxkatt/docs run dev",
+    "docs:build": "pnpm --filter @xxkatt/docs run build",
+    "docs:preview": "pnpm --filter @xxkatt/docs run preview",
     "build": "pnpm --filter @xxkatt/utils run build",
     "typecheck": "pnpm --filter @xxkatt/utils run typecheck",
     "test": "pnpm --filter @xxkatt/utils run test",

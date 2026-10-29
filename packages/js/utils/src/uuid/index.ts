@@ -3,15 +3,15 @@ const ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
 /**
  * 生成 UUID v4，默认返回 32 个小写十六进制字符。
  *
- * @param hyphens 是否保留标准 UUID 中的横杠，默认 false。
  * @param prefix 原样拼接在 UUID 前的前缀，分隔符需自行提供。
+ * @param hyphens 是否保留标准 UUID 中的横杠，默认 false。
  * @example
  * uuid()
- * uuid(true)
- * uuid(false, 'user_')
- * uuid(true, 'user_')
+ * uuid('', true)
+ * uuid('user_')
+ * uuid('user_', true)
  */
-export function uuid(hyphens: boolean = false, prefix: string = ''): string {
+export function uuid(prefix: string = '', hyphens: boolean = false): string {
   const value = globalThis.crypto.randomUUID()
   return prefix + (hyphens ? value : value.replaceAll('-', ''))
 }

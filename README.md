@@ -70,7 +70,7 @@ pnpm build
 pnpm docs:dev
 ```
 
-也可以使用 `pnpm docs:build` 构建静态站点，再通过 `pnpm docs:preview` 预览。文档源文件位于 [`docs/`](./docs/)，API 从 [工具概览](./docs/js/utils/index.md) 开始阅读。
+也可以使用 `pnpm docs:build` 构建静态站点，再通过 `pnpm docs:preview` 预览。文档源文件位于 [`apps/docs/`](./apps/docs/)，API 从 [工具概览](./apps/docs/js/utils/index.md) 开始阅读。
 
 ## 🤝 一起完善
 
