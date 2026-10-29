@@ -74,6 +74,17 @@ pnpm --filter @xxkatt/utils build
 
 文档站是独立 workspace 包 `@xxkatt/docs`，也可使用 `pnpm --filter @xxkatt/docs dev` 启动。静态站点输出到 `apps/docs/.vitepress/dist/`；修改文档后运行 `pnpm docs:build` 验证。
 
+## 部署文档到 GitHub Pages
+
+仓库使用 [GitHub Actions workflow](./.github/workflows/deploy-docs.yml) 构建并部署文档站。首次部署时：
+
+1. 在 GitHub 仓库的 **Settings → Pages → Build and deployment** 中，将 **Source** 设为 **GitHub Actions**。
+2. 将配置推送到默认分支 `master`，使 workflow 出现在 Actions 页面。
+3. 在 **Actions → Deploy docs to GitHub Pages → Run workflow** 中选择 `master` 分支并手动触发部署。
+4. 等待 workflow 成功后，访问 <https://xxkatt.github.io/xxkatt-utils/>。
+
+之后需要更新网站时，手动运行 workflow；推送代码不会自动触发部署。VitePress 的 `base` 已设为 `/xxkatt-utils/`，本地开发和预览也使用这个路径；如果以后改为自定义域名根路径，需要将 `base` 改为 `/`。
+
 ## 添加工具
 
 在 `packages/js/utils/src` 中编写工具函数，从 `src/index.ts` 统一导出。包内可通过 `@/` 引用 `src/` 下的模块。

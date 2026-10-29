@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
+  base: '/xxkatt-utils/',
   lang: 'zh-CN',
   title: 'xxkatt-utils',
   description: '按语言分区的工具库，提供工具函数的使用指南与 API 文档。',
