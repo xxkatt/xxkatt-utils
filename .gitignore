@@ -1,0 +1,11 @@
+.DS_Store
+.idea/
+node_modules/
+.pnpm-store/
+dist/
+coverage/
+*.tsbuildinfo
+*.log
+.env
+.env.*
+!.env.example
