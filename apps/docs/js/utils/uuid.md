@@ -43,5 +43,4 @@ function uuid(prefix?: string, hyphens?: boolean): string
 
 - 前缀不会自动补充分隔符。`uuid('user')` 会直接以 `user` 开头；需要下划线时请传入 `'user_'`。
 - 无需前缀但要保留横杠时，可调用 `uuid('', true)` 或 `uuid(undefined, true)`。
-- 依赖 `globalThis.crypto.randomUUID()`；浏览器中需要安全上下文（如 HTTPS 或 localhost）。
 - 需要自定义长度或字符范围时，使用 [randomId](./random-id)。

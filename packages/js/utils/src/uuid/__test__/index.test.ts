@@ -36,6 +36,52 @@ describe('uuid', () => {
     )
     expect(uuid(prefix, hyphens)).toBe(expected)
   })
+
+  it('优先使用原生 randomUUID', () => {
+    const randomUUID = vi.fn(() => '00112233-4455-4677-8899-aabbccddeeff')
+    const getRandomValues = vi.fn()
+    vi.stubGlobal('crypto', { randomUUID, getRandomValues })
+
+    expect(uuid()).toBe('00112233445546778899aabbccddeeff')
+    expect(randomUUID).toHaveBeenCalledTimes(1)
+    expect(getRandomValues).not.toHaveBeenCalled()
+  })
+
+  it.each<[string | undefined, boolean | undefined, string]>([
+    [undefined, undefined, '00112233445546778899aabbccddeeff'],
+    ['user_', false, 'user_00112233445546778899aabbccddeeff'],
+    [undefined, true, '00112233-4455-4677-8899-aabbccddeeff'],
+    ['user_', true, 'user_00112233-4455-4677-8899-aabbccddeeff'],
+  ])('缺少 randomUUID 时仍支持前缀 %s 和横杠选项 %s', (prefix, hyphens, expected) => {
+    const getRandomValues = vi.fn((bytes: Uint8Array) => {
+      bytes.set(Array.from({ length: 16 }, (_, index) => index * 17))
+      return bytes
+    })
+    vi.stubGlobal('crypto', { getRandomValues })
+
+    expect(uuid(prefix, hyphens)).toBe(expected)
+    expect(getRandomValues).toHaveBeenCalledTimes(1)
+    expect(getRandomValues.mock.calls[0]![0]).toHaveLength(16)
+  })
+
+  it.each([
+    [0x00, '00000000-0000-4000-8000-000000000000'],
+    [0x55, '55555555-5555-4555-9555-555555555555'],
+    [0xaa, 'aaaaaaaa-aaaa-4aaa-aaaa-aaaaaaaaaaaa'],
+    [0xff, 'ffffffff-ffff-4fff-bfff-ffffffffffff'],
+  ] as const)('回退时正确设置版本位和变体位，随机字节为 %i', (byte, expected) => {
+    vi.stubGlobal('crypto', {
+      getRandomValues: (bytes: Uint8Array) => bytes.fill(byte),
+    })
+
+    expect(uuid('', true)).toBe(expected)
+  })
+
+  it.each([undefined, {}])('缺少安全随机数 API 时明确报错：%s', (crypto) => {
+    vi.stubGlobal('crypto', crypto)
+
+    expect(() => uuid()).toThrow('uuid requires crypto.randomUUID or crypto.getRandomValues')
+  })
 })
 
 describe('randomId', () => {

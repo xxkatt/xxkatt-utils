@@ -44,8 +44,6 @@ randomId(8, 10) // 8 位随机数字，例如 '20839157'
 randomId(21, 62) // 21 位随机 ID，字符来自 0–9、a–z、A–Z
 ```
 
-两种工具均使用 Web Crypto 生成随机值。`uuid` 使用 `crypto.randomUUID()`，在浏览器中需要 HTTPS 或 localhost 等安全上下文。
-
 ## 📦 本地体验
 
 项目处于早期开发阶段，`@xxkatt/utils` 尚未发布到 npm。目前可以克隆仓库，在本地构建和运行测试。

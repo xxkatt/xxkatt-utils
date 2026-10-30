@@ -54,5 +54,4 @@ function randomId(length?: number, radix?: number): string
 - `length` 为负数、小数、`NaN`、无穷值或超出安全整数范围时，抛出 `RangeError`。
 - `radix` 不是 `2` 至 `62` 的整数时，抛出 `RangeError`。
 - `length` 为 `0` 时仍会校验 `radix`。例如 `randomId(0, 1)` 会抛出 `RangeError`。
-- 依赖 `globalThis.crypto.getRandomValues()`，通过丢弃不能均分到字符表的随机值来避免取模偏差。
 - 随机 ID 仍可能重复，长度越短、字符范围越小，重复概率越高。需要标准 UUID v4 格式时，使用 [uuid](./uuid)。

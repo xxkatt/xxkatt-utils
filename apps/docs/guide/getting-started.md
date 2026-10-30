@@ -52,10 +52,6 @@ const code = randomId(8, 10)
 node --input-type=module -e "import { uuid, randomId } from './packages/js/utils/dist/index.js'; console.log(uuid(), randomId(8, 10))"
 ```
 
-## 运行环境
-
-当前工具依赖 Web Crypto API：`uuid` 使用 `globalThis.crypto.randomUUID()`，`randomId` 使用 `globalThis.crypto.getRandomValues()`。Node.js 24+ 可直接运行；浏览器需要支持对应 API，其中 `randomUUID()` 要求安全上下文（如 HTTPS 或 localhost）。
-
 ## 查阅 API
 
 - [uuid](/js/utils/uuid)：生成 UUID v4，支持横杠和前缀。

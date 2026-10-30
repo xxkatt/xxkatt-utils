@@ -12,8 +12,26 @@ const ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
  * uuid('user_', true)
  */
 export function uuid(prefix: string = '', hyphens: boolean = false): string {
-  const value = globalThis.crypto.randomUUID()
-  return prefix + (hyphens ? value : value.replaceAll('-', ''))
+  const crypto = globalThis.crypto
+  let value: string
+
+  if (typeof crypto?.randomUUID === 'function') {
+    value = crypto.randomUUID()
+  } else {
+    if (typeof crypto?.getRandomValues !== 'function') {
+      throw new Error('uuid requires crypto.randomUUID or crypto.getRandomValues')
+    }
+
+    const bytes = new Uint8Array(16)
+    crypto.getRandomValues(bytes)
+    // 设置 UUID v4 的版本位和 RFC 变体位，保留其余随机位。
+    bytes[6] = (bytes[6]! & 0x0f) | 0x40
+    bytes[8] = (bytes[8]! & 0x3f) | 0x80
+    const hex = Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('')
+    value = `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`
+  }
+
+  return prefix + (hyphens ? value : value.replace(/-/g, ''))
 }
 
 /**

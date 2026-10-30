@@ -1,68 +1,38 @@
-# @xxkatt/utils
+<h1 align="center">@xxkatt/utils</h1>
 
-常用的 JavaScript / TypeScript 工具函数，提供 ESM 导出和 TypeScript 类型声明，无运行时依赖。
+<p align="center">把常用的小工具，放在一起。</p>
+<p align="center">轻量、类型齐全的 JavaScript / TypeScript 工具函数库</p>
 
-## 安装
+<p align="center">
+  <a href="https://www.npmjs.com/package/@xxkatt/utils"><img src="https://img.shields.io/npm/v/@xxkatt/utils?color=a1b858&amp;label=version" alt="npm version" /></a>
+  <a href="https://www.npmjs.com/package/@xxkatt/utils"><img src="https://img.shields.io/npm/dm/@xxkatt/utils?color=50a36f&amp;label=downloads" alt="npm downloads" /></a>
+  <a href="https://github.com/xxkatt/xxkatt-utils/blob/master/packages/js/utils/LICENSE"><img src="https://img.shields.io/npm/l/@xxkatt/utils?color=3178c6" alt="MIT license" /></a>
+</p>
+
+## 👀 文档
+
+[查看文档](https://xxkatt.github.io/xxkatt-utils/) · [源码仓库](https://github.com/xxkatt/xxkatt-utils) · [问题反馈](https://github.com/xxkatt/xxkatt-utils/issues)
+
+## 🚀 特性
+
+- 🦾 **类型齐全**：使用 TypeScript 编写，提供类型声明与参数提示。
+- 💫 **零依赖**：无运行时依赖，只安装工具库本身。
+- ⚡️ **按需打包**：提供 ESM 导出，支持 Tree-shaking。
+- 🌎 **框架无关**：支持 Node.js 24+ 和现代浏览器，可搭配不同的前端框架使用。
+
+## 📦 安装
 
 ```sh
+# npm
+npm install @xxkatt/utils
+
+# pnpm
 pnpm add @xxkatt/utils
+
+# yarn
+yarn add @xxkatt/utils
 ```
-
-## 使用
-
-```ts
-import { randomId, uuid } from '@xxkatt/utils'
-
-uuid() // 32 位 UUID v4，不带横杠
-uuid('', true) // 标准 UUID v4：xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
-uuid('user_') // 添加前缀：user_…
-uuid('user_', true) // 添加前缀并保留横杠
-
-randomId() // 32 个随机的小写十六进制字符
-randomId(8, 10) // 8 位随机数字，可能以 0 开头
-randomId(21, 62) // 21 个随机字符，字符来自 0–9、a–z、A–Z
-```
-
-## API
-
-### uuid(prefix?, hyphens?)
-
-生成 UUID v4，返回 `string`。
-
-| 参数      | 类型      | 默认值  | 说明                                 |
-| --------- | --------- | ------- | ------------------------------------ |
-| `prefix`  | `string`  | `''`    | 原样拼接在 UUID 前，分隔符需自行提供 |
-| `hyphens` | `boolean` | `false` | 是否保留标准 UUID 中的横杠           |
-
-不计前缀时，默认返回 32 个小写十六进制字符；保留横杠时长度为 36。
-
-### randomId(length?, radix?)
-
-使用加密安全随机数生成自定义 ID，返回 `string`。
-
-| 参数     | 类型     | 默认值 | 说明                                           |
-| -------- | -------- | ------ | ---------------------------------------------- |
-| `length` | `number` | `32`   | 字符数量，必须为非负安全整数；`0` 返回空字符串 |
-| `radix`  | `number` | `16`   | 基数，必须为 `2` 至 `62` 的整数（含边界）      |
-
-字符表为 `0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`，使用其中前 `radix` 个字符。参数不符合要求时抛出 `RangeError`；`length` 为 `0` 时仍会校验 `radix`。
-
-自定义 ID 不遵循 UUID 格式，随机结果可能重复。需要标准 UUID v4 时请使用 `uuid`。
-
-## 运行环境
-
-支持 Node.js 24+，以及支持 Web Crypto API 和 ES2022 的现代浏览器。
-
-- `uuid` 依赖 `globalThis.crypto.randomUUID()`；浏览器中需要 HTTPS 或 localhost 等安全上下文。
-- `randomId` 依赖 `globalThis.crypto.getRandomValues()`。
-- 通过 ESM `import` 使用。
-
-## 文档与反馈
-
-- [完整 API 文档](https://github.com/xxkatt/xxkatt-utils/tree/master/apps/docs/js/utils)
-- [源码仓库](https://github.com/xxkatt/xxkatt-utils)
-- [问题反馈](https://github.com/xxkatt/xxkatt-utils/issues)
 
 ## 许可证
 
-[MIT](./LICENSE) © 2026 xxkatt
+[MIT © 2026 xxkatt](./LICENSE)
