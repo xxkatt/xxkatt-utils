@@ -56,6 +56,7 @@ node --input-type=module -e "import { uuid, randomId } from './packages/js/utils
 
 - [uuid](/js/utils/uuid)：生成 UUID v4，支持横杠和前缀。
 - [randomId](/js/utils/random-id)：生成指定长度、指定字符范围的随机 ID。
+- [download](/js/utils/download)：在浏览器中下载 URL、Data URL 或 Blob/File。
 
 ## 本地查看文档
 

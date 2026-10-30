@@ -21,6 +21,7 @@ export default defineConfig({
           { text: '概览', link: '/js/utils/' },
           { text: 'uuid', link: '/js/utils/uuid' },
           { text: 'randomId', link: '/js/utils/random-id' },
+          { text: 'download', link: '/js/utils/download' },
         ],
       },
     ],
