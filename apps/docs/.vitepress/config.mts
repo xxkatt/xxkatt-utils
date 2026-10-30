@@ -6,6 +6,7 @@ export default defineConfig({
   title: 'xxkatt-utils',
   description: '按语言分区的工具库，提供工具函数的使用指南与 API 文档。',
   themeConfig: {
+    socialLinks: [{ icon: 'github', link: 'https://github.com/xxkatt/xxkatt-utils' }],
     nav: [
       { text: '快速开始', link: '/guide/getting-started' },
       { text: 'JavaScript / TypeScript', link: '/js/utils/' },
