@@ -24,6 +24,7 @@ export default defineConfig({
           { text: 'download', link: '/js/utils/download' },
           { text: 'debounce', link: '/js/utils/debounce' },
           { text: 'throttle', link: '/js/utils/throttle' },
+          { text: 'is', link: '/js/utils/is' },
         ],
       },
     ],
