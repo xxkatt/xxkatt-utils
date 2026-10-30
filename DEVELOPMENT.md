@@ -42,7 +42,10 @@ xxkatt-utils/
             ├── vitest.config.ts
             └── src/
                 ├── index.ts   # 公共导出入口
-                └── uuid/      # UUID 与随机 ID
+                ├── uuid/      # UUID 与随机 ID
+                ├── download/  # 浏览器下载
+                ├── debounce/  # 防抖
+                └── throttle/  # 节流
 ```
 
 后续其他语言放入 `packages/<语言>`，分别使用各自的工具链。`packages/js/tsconfig.base.json` 是共享配置，不是独立包。
@@ -111,4 +114,4 @@ tsdown 构建目标为 ES2022，输出 ESM、类型声明和 sourcemap 到包内
 
 共享开发工具由根目录管理，文档站专用的 VitePress 依赖由 `apps/docs` 管理，运行依赖声明在对应包中，内部包依赖使用 `workspace:*`。依赖变更需同步更新 `pnpm-lock.yaml`，不混用其他包管理器或锁文件。
 
-根项目和当前工具包均标记为 `private`，尚未配置 npm 发布流程。
+根项目和文档站标记为 `private`。`@xxkatt/utils` 已发布到 [npm](https://www.npmjs.com/package/@xxkatt/utils)，包内 `publishConfig` 指定公开发布到 npm 官方 registry，`files` 指定发布 `dist/` 构建产物。

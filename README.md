@@ -7,7 +7,7 @@
   <p>
     <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-类型支持-3178c6?style=flat-square&amp;logo=typescript&amp;logoColor=white" alt="TypeScript 类型支持" /></a>
     <img src="https://img.shields.io/badge/模块-ESM-2563eb?style=flat-square" alt="ESM 模块" />
-    <img src="https://img.shields.io/badge/状态-开发中-f59e0b?style=flat-square" alt="开发中" />
+    <a href="https://www.npmjs.com/package/@xxkatt/utils"><img src="https://img.shields.io/npm/v/@xxkatt/utils?color=a1b858&amp;label=version" alt="npm version" /></a>
   </p>
 
   <p>
@@ -22,7 +22,7 @@
 
 - **类型齐全** — 使用 TypeScript 编写，提供类型声明，调用时就能看到参数提示。
 - **轻装使用** — 无运行时依赖，以 ESM 导出，可按需导入工具函数。
-- **逐步积累** — 目前从 ID 生成开始，按实际需求补充工具，每个工具配套单元测试。
+- **逐步积累** — 提供 ID 生成、浏览器下载、防抖和节流工具，每个工具配套单元测试。
 
 ## 🧰 工具一览
 
@@ -33,6 +33,20 @@
 | `download` | 在浏览器中下载 URL、Data URL 或 Blob/File   |
 | `debounce` | 防抖：停止调用指定时间后执行最后一次调用    |
 | `throttle` | 节流：首次立即执行，间隔内保留最后一次调用  |
+
+## 📦 安装
+
+在项目中使用 npm 或 pnpm 安装：
+
+```sh
+# npm
+npm install @xxkatt/utils
+
+# pnpm
+pnpm add @xxkatt/utils
+```
+
+支持 Node.js 24+ 和现代浏览器，提供 ESM 导出和 TypeScript 类型声明。安装后即可通过包名导入。
 
 ## 🔨 使用示例
 
@@ -49,7 +63,7 @@ randomId(21, 62) // 21 位随机 ID，字符来自 0–9、a–z、A–Z
 
 ## 📦 本地体验
 
-项目处于早期开发阶段，`@xxkatt/utils` 尚未发布到 npm。目前可以克隆仓库，在本地构建和运行测试。
+如需修改源码或参与开发，可以克隆仓库，在本地构建和运行测试。
 
 准备 **Node.js 24+** 和 **pnpm 11.24.0**，然后执行：
 
@@ -65,7 +79,9 @@ pnpm build
 
 ## 📚 文档
 
-项目文档使用 VitePress 编写，包含快速开始和完整 API 说明。运行以下命令启动本地文档站：
+访问[在线文档](https://xxkatt.github.io/xxkatt-utils/)，查看快速开始和完整 API 说明。
+
+项目文档使用 VitePress 编写。在本地仓库中运行以下命令启动文档站：
 
 ```sh
 pnpm docs:dev
