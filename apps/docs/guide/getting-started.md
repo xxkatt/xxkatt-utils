@@ -57,6 +57,8 @@ node --input-type=module -e "import { uuid, randomId } from './packages/js/utils
 - [uuid](/js/utils/uuid)：生成 UUID v4，支持横杠和前缀。
 - [randomId](/js/utils/random-id)：生成指定长度、指定字符范围的随机 ID。
 - [download](/js/utils/download)：在浏览器中下载 URL、Data URL 或 Blob/File。
+- [debounce](/js/utils/debounce)：停止调用指定时间后执行最后一次调用，支持取消。
+- [throttle](/js/utils/throttle)：首次立即执行，间隔内保留最后一次调用，支持取消。
 
 ## 本地查看文档
 
