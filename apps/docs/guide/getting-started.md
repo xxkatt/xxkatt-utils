@@ -30,6 +30,12 @@ const code = randomId(8, 10)
 
 `download` 需要在浏览器页面中调用，具体使用方式见对应 API 文档。
 
+## 按需打包
+
+`@xxkatt/utils` 使用 ESM 导出，并声明 `sideEffects: false`，支持 Tree-shaking（摇树优化）。使用 Vite 等支持摇树优化的打包器进行生产构建时，未使用的工具函数会被移除，只保留实际使用的函数及其依赖。
+
+按上面的方式使用具名导入即可，无需额外配置。直接在 Node.js 中导入并不会执行摇树优化；这一步由打包器完成。
+
 ## 查阅 API
 
 - [uuid](/js/utils/uuid)：生成 UUID v4，支持横杠和前缀。
