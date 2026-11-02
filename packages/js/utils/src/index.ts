@@ -10,3 +10,7 @@ export * from '@/throttle'
 
 // 类型、判空与格式校验
 export * from '@/is'
+
+// 浏览器存储
+export * from '@/storage'
+export * from '@/cookie'

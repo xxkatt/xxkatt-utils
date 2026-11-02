@@ -26,6 +26,8 @@ export default defineConfig({
           { text: 'debounce', link: '/js/utils/debounce' },
           { text: 'throttle', link: '/js/utils/throttle' },
           { text: 'is', link: '/js/utils/is' },
+          { text: 'localStorage', link: '/js/utils/storage' },
+          { text: 'cookie', link: '/js/utils/cookie' },
         ],
       },
     ],
