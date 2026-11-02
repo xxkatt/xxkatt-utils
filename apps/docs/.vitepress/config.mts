@@ -5,7 +5,9 @@ export default defineConfig({
   lang: 'zh-CN',
   title: 'xxkatt-utils',
   description: '按语言分区的工具库，提供工具函数的使用指南与 API 文档。',
+  head: [['link', { rel: 'icon', type: 'image/svg+xml', href: '/xxkatt-utils/logo.svg' }]],
   themeConfig: {
+    logo: { src: '/logo.svg', alt: 'xxkatt-utils' },
     socialLinks: [{ icon: 'github', link: 'https://github.com/xxkatt/xxkatt-utils' }],
     nav: [
       { text: '快速开始', link: '/guide/getting-started' },

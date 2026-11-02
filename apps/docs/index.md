@@ -5,6 +5,11 @@ hero:
   name: xxkatt-utils
   text: 常用工具，按需使用
   tagline: 按语言分区维护的工具库，从 JavaScript / TypeScript 开始。
+  image:
+    src: /logo.svg
+    alt: xxkatt-utils
+    width: 320
+    height: 320
   actions:
     - theme: brand
       text: 快速开始
