@@ -28,6 +28,7 @@ export default defineConfig({
           { text: 'is', link: '/js/utils/is' },
           { text: 'localStorage', link: '/js/utils/storage' },
           { text: 'cookie', link: '/js/utils/cookie' },
+          { text: 'URL', link: '/js/utils/url' },
         ],
       },
     ],

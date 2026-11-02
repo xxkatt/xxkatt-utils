@@ -14,3 +14,6 @@ export * from '@/is'
 // 浏览器存储
 export * from '@/storage'
 export * from '@/cookie'
+
+// URL 查询参数与 hash
+export * from '@/url'
