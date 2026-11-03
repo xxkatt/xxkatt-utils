@@ -31,6 +31,7 @@
 | `uuid`     | 生成 UUID v4，可保留横杠、添加前缀               |
 | `randomId` | 生成指定长度的随机 ID，支持 2–62 进制字符集      |
 | `download` | 在浏览器中下载 URL、Data URL 或 Blob/File        |
+| `file`     | File/Blob 与完整 Data URL 互转                   |
 | `copyText` | 复制文本，支持 Clipboard API 和传统复制降级      |
 | `debounce` | 防抖：停止调用指定时间后执行最后一次调用         |
 | `throttle` | 节流：首次立即执行，间隔内保留最后一次调用       |

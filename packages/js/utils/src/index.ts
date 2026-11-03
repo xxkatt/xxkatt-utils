@@ -4,6 +4,9 @@ export * from '@/uuid'
 // 下载文件
 export * from '@/download'
 
+// File/Blob 与 Data URL 转换
+export * from '@/file'
+
 // 复制文本
 export * from '@/clipboard'
 
