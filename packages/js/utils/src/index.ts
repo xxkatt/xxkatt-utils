@@ -7,6 +7,9 @@ export * from '@/download'
 // File/Blob 与 Data URL 转换
 export * from '@/file'
 
+// 对象与 FormData 转换
+export * from '@/form-data'
+
 // 复制文本
 export * from '@/clipboard'
 

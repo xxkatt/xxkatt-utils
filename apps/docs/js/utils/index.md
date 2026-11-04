@@ -11,6 +11,7 @@ JavaScript / TypeScript 工具包，提供 ESM 导出和 TypeScript 类型声明
 | [download](./download)    | 在浏览器中下载 URL、Data URL 或 Blob/File        |
 | [fileToDataURL](./file)   | 将 File/Blob 异步读取为完整 Base64 Data URL      |
 | [dataURLToBlob](./file)   | 将完整 Data URL 同步还原为 Blob                  |
+| [FormData](./form-data)   | 将字段对象转换为 FormData，支持数组和文件值      |
 | [copyText](./copy-text)   | 复制文本，支持 Clipboard API 和传统复制降级      |
 | [debounce](./debounce)    | 防抖：停止调用指定时间后执行最后一次调用         |
 | [throttle](./throttle)    | 节流：首次立即执行，间隔内保留最后一次调用       |

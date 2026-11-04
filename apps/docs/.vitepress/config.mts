@@ -26,6 +26,7 @@ export default defineConfig({
           { text: 'randomId', link: '/js/utils/random-id' },
           { text: 'download', link: '/js/utils/download' },
           { text: 'File', link: '/js/utils/file' },
+          { text: 'FormData', link: '/js/utils/form-data' },
           { text: 'copyText', link: '/js/utils/copy-text' },
           { text: 'debounce', link: '/js/utils/debounce' },
           { text: 'throttle', link: '/js/utils/throttle' },
