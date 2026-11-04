@@ -1,5 +1,5 @@
 import { describe, expect, expectTypeOf, it, vi } from 'vitest'
-import { findTreeNode, findTreePath, listToTree, treeToList } from '@/index'
+import { filterTree, findTreeNode, findTreePath, listToTree, mapTree, treeToList } from '@/index'
 import type { TreeNode } from '@/index'
 
 interface Item {
@@ -188,7 +188,198 @@ describe('findTreeNode / findTreePath', () => {
   })
 })
 
-it('深层树的转换和查找不依赖递归调用栈', () => {
+describe('filterTree', () => {
+  it('保留命中节点及其祖先，移除其他分支并保持根节点和同级顺序', () => {
+    const result = filterTree(tree, (node) => node.id >= 3)
+
+    expect(result).toEqual([
+      {
+        id: 1,
+        parentId: null,
+        name: 'root',
+        children: [
+          {
+            id: 2,
+            parentId: 1,
+            name: 'child',
+            children: [{ id: 3, parentId: 2, name: 'leaf', children: [] }],
+          },
+          { id: 4, parentId: 1, name: 'sibling', children: [] },
+        ],
+      },
+      { id: 5, name: 'other', children: [] },
+    ])
+    expect(filterTree(tree, (node) => node.id === 3)).toEqual([
+      {
+        id: 1,
+        parentId: null,
+        name: 'root',
+        children: [
+          {
+            id: 2,
+            parentId: 1,
+            name: 'child',
+            children: [{ id: 3, parentId: 2, name: 'leaf', children: [] }],
+          },
+        ],
+      },
+    ])
+    expectTypeOf(result).toEqualTypeOf<TreeNode<Item>[]>()
+  })
+
+  it('按深度优先前序判断每个原节点，父节点命中不会自动保留后代', () => {
+    const predicate = vi.fn((node: Item) => node.id === 1)
+
+    expect(filterTree(tree, predicate)).toEqual([
+      { id: 1, parentId: null, name: 'root', children: [] },
+    ])
+    expect(predicate.mock.calls.map(([node]) => node.id)).toEqual([1, 2, 3, 4, 5])
+    expect(predicate.mock.calls[0]?.[0]).toBe(root)
+    expect(predicate.mock.calls[2]?.[0]).toBe(leaf)
+  })
+
+  it('浅拷贝保留节点并创建新的子节点数组，不修改只读输入', () => {
+    const metadata = Object.freeze({ label: 'shared' })
+    const data = Object.freeze([
+      Object.freeze({
+        id: 1,
+        metadata,
+        children: Object.freeze([Object.freeze({ id: 2, metadata })]),
+      }),
+    ])
+    const result = filterTree(data, () => true)
+
+    expect(result[0]).not.toBe(data[0])
+    expect(result[0]?.children).not.toBe(data[0]?.children)
+    expect(result[0]?.children[0]).not.toBe(data[0]?.children[0])
+    expect(result[0]?.metadata).toBe(metadata)
+    expect(result[0]?.children[0]?.metadata).toBe(metadata)
+    expect(result[0]?.children[0]?.children).toEqual([])
+    expect(data[0]?.children[0]).not.toHaveProperty('children')
+  })
+
+  it('支持自定义子节点字段，保留其他同名业务字段并补齐叶节点数组', () => {
+    const data = [
+      { key: 1, children: 'metadata', nodes: [{ key: 2 }] },
+      { key: 3, nodes: null },
+    ]
+    const result = filterTree(data, (node) => node.key !== 1, { childrenKey: 'nodes' })
+
+    expect(result).toEqual([
+      { key: 1, children: 'metadata', nodes: [{ key: 2, nodes: [] }] },
+      { key: 3, nodes: [] },
+    ])
+    expectTypeOf(result).toEqualTypeOf<TreeNode<(typeof data)[number], 'nodes'>[]>()
+  })
+
+  it('空树或完全未匹配时返回空数组', () => {
+    const predicate = vi.fn((node: Item) => node.id === 99)
+
+    expect(filterTree([], predicate)).toEqual([])
+    expect(predicate).not.toHaveBeenCalled()
+    expect(filterTree(tree, predicate)).toEqual([])
+    expect(predicate).toHaveBeenCalledTimes(5)
+  })
+
+  it('透传筛选函数的错误并停止遍历', () => {
+    const error = new Error('filtering failed')
+    const predicate = vi.fn((node: Item) => {
+      if (node.id === 2) throw error
+      return true
+    })
+
+    expect(() => filterTree(tree, predicate)).toThrow(error)
+    expect(predicate.mock.calls.map(([node]) => node.id)).toEqual([1, 2])
+  })
+})
+
+describe('mapTree', () => {
+  it('按深度优先前序映射每个原节点，保留层级和同级顺序', () => {
+    const mapper = vi.fn((node: Item) => ({ value: node.id, label: node.name }))
+    const result = mapTree(tree, mapper)
+
+    expect(result).toEqual([
+      {
+        value: 1,
+        label: 'root',
+        children: [
+          {
+            value: 2,
+            label: 'child',
+            children: [{ value: 3, label: 'leaf', children: [] }],
+          },
+          { value: 4, label: 'sibling', children: [] },
+        ],
+      },
+      { value: 5, label: 'other', children: [] },
+    ])
+    expect(mapper.mock.calls.map(([node]) => node.id)).toEqual([1, 2, 3, 4, 5])
+    expect(mapper.mock.calls[0]?.[0]).toBe(root)
+    expect(mapper.mock.calls[2]?.[0]).toBe(leaf)
+    expectTypeOf(result).toEqualTypeOf<TreeNode<{ value: number; label: string }>[]>()
+  })
+
+  it('浅拷贝映射结果并创建新的子节点数组，不修改只读输入', () => {
+    const metadata = Object.freeze({ label: 'shared' })
+    const data = Object.freeze([
+      Object.freeze({
+        id: 1,
+        metadata,
+        children: Object.freeze([Object.freeze({ id: 2, metadata })]),
+      }),
+    ])
+    const result = mapTree(data, (node) => node)
+
+    expect(result[0]).not.toBe(data[0])
+    expect(result[0]?.children).not.toBe(data[0]?.children)
+    expect(result[0]?.children[0]).not.toBe(data[0]?.children[0])
+    expect(result[0]?.metadata).toBe(metadata)
+    expect(result[0]?.children[0]?.metadata).toBe(metadata)
+    expect(data[0]?.children[0]).not.toHaveProperty('children')
+    expectTypeOf(result).toEqualTypeOf<TreeNode<(typeof data)[number]>[]>()
+  })
+
+  it('支持自定义子节点字段，覆盖映射结果中的该字段并保留其他业务字段', () => {
+    const data = [
+      { key: 1, nodes: [{ key: 2 }] },
+      { key: 3, nodes: null },
+    ]
+    const mapped = Object.freeze({ label: 'mapped', children: 'metadata', nodes: 'old' })
+    const result = mapTree(data, () => mapped, { childrenKey: 'nodes' })
+
+    expect(result).toEqual([
+      {
+        label: 'mapped',
+        children: 'metadata',
+        nodes: [{ label: 'mapped', children: 'metadata', nodes: [] }],
+      },
+      { label: 'mapped', children: 'metadata', nodes: [] },
+    ])
+    expect(result[0]).not.toBe(result[1])
+    expect(mapped.nodes).toBe('old')
+    expectTypeOf(result).toEqualTypeOf<TreeNode<typeof mapped, 'nodes'>[]>()
+  })
+
+  it('空树返回新空数组，不调用映射函数', () => {
+    const mapper = vi.fn((node: Item) => ({ id: node.id }))
+
+    expect(mapTree([], mapper)).toEqual([])
+    expect(mapper).not.toHaveBeenCalled()
+  })
+
+  it('透传映射函数的错误并停止遍历', () => {
+    const error = new Error('mapping failed')
+    const mapper = vi.fn((node: Item) => {
+      if (node.id === 2) throw error
+      return { id: node.id }
+    })
+
+    expect(() => mapTree(tree, mapper)).toThrow(error)
+    expect(mapper.mock.calls.map(([node]) => node.id)).toEqual([1, 2])
+  })
+})
+
+it('深层树的转换、查找、筛选和映射不依赖递归调用栈', () => {
   const list = Array.from({ length: 15_000 }, (_, id) => ({
     id,
     parentId: id === 0 ? null : id - 1,
@@ -198,4 +389,11 @@ it('深层树的转换和查找不依赖递归调用栈', () => {
   expect(treeToList(deepTree)).toEqual(list)
   expect(findTreeNode(deepTree, (node) => node.id === 14_999)?.id).toBe(14_999)
   expect(findTreePath(deepTree, (node) => node.id === 14_999)).toHaveLength(15_000)
+
+  const mapped = mapTree(deepTree, (node) => ({ value: node.id }))
+  expect(treeToList(mapped)).toEqual(list.map(({ id }) => ({ value: id })))
+
+  const filtered = filterTree(deepTree, (node) => node.id === 14_999)
+  expect(treeToList(filtered)).toEqual(list)
+  expect(filterTree(deepTree, () => false)).toEqual([])
 })

@@ -18,6 +18,6 @@ JavaScript / TypeScript 工具包，提供 ESM 导出和 TypeScript 类型声明
 | [localStorage](./storage) | 自动 JSON 序列化的本地存储读写与删除             |
 | [cookie](./cookie)        | cookie 读写与删除，支持有效期和作用域            |
 | [URL](./url)              | 查询参数解析、序列化、读写与删除，以及 hash 读写 |
-| [Tree](./tree)            | 树与列表转换、节点及路径查找                     |
+| [Tree](./tree)            | 树与列表转换、节点及路径查找、筛选与映射         |
 
 首次使用请先阅读[快速开始](/guide/getting-started)。所有函数均从 `@xxkatt/utils` 的公共入口导入。

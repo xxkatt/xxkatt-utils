@@ -132,3 +132,67 @@ export function findTreePath<T extends object, ChildrenKey extends string = 'chi
   }
   return undefined
 }
+
+/** 保留匹配节点及其祖先；逐个判断原节点，浅拷贝结果并重建子节点数组。 */
+export function filterTree<T extends object, ChildrenKey extends string = 'children'>(
+  tree: readonly T[],
+  predicate: (node: T) => boolean,
+  options: TreeOptions<ChildrenKey> = {},
+): TreeNode<T, ChildrenKey>[] {
+  const childrenKey = options.childrenKey ?? 'children'
+  const filtered: TreeNode<T, ChildrenKey>[] = []
+  const stack: {
+    iterator: Iterator<T>
+    children: TreeNode<T, ChildrenKey>[]
+    item?: TreeNode<T, ChildrenKey>
+    matches: boolean
+  }[] = [{ iterator: tree[Symbol.iterator](), children: filtered, matches: false }]
+
+  while (stack.length > 0) {
+    const frame = stack[stack.length - 1]!
+    const result = frame.iterator.next()
+    if (result.done) {
+      stack.pop()
+      if (frame.item && (frame.matches || frame.children.length > 0)) {
+        stack[stack.length - 1]!.children.push(frame.item)
+      }
+      continue
+    }
+
+    const node = result.value
+    const matches = predicate(node)
+    const children: TreeNode<T, ChildrenKey>[] = []
+    const item = { ...node, [childrenKey]: children } as unknown as TreeNode<T, ChildrenKey>
+    const sourceChildren = (node as Record<string, readonly T[] | null | undefined>)[childrenKey]
+    stack.push({
+      iterator: (sourceChildren ?? [])[Symbol.iterator](),
+      children,
+      item,
+      matches,
+    })
+  }
+  return filtered
+}
+
+/** 按深度优先前序映射原节点；浅拷贝映射结果，保留层级并重建子节点数组。 */
+export function mapTree<
+  T extends object,
+  R extends object,
+  ChildrenKey extends string = 'children',
+>(
+  tree: readonly T[],
+  mapper: (node: T) => R,
+  options: TreeOptions<ChildrenKey> = {},
+): TreeNode<R, ChildrenKey>[] {
+  const childrenKey = options.childrenKey ?? 'children'
+  const mapped: TreeNode<R, ChildrenKey>[] = []
+  const childrenByDepth = [mapped]
+
+  for (const { node, path } of walkTree(tree, childrenKey)) {
+    const children: TreeNode<R, ChildrenKey>[] = []
+    const item = { ...mapper(node), [childrenKey]: children } as unknown as TreeNode<R, ChildrenKey>
+    childrenByDepth[path.length - 1]!.push(item)
+    childrenByDepth[path.length] = children
+  }
+  return mapped
+}

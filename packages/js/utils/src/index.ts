@@ -24,5 +24,5 @@ export * from '@/cookie'
 // URL 查询参数与 hash
 export * from '@/url'
 
-// 树与列表转换、节点及路径查找
+// 树与列表转换、查找、筛选与映射
 export * from '@/tree'
