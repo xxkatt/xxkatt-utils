@@ -1,6 +1,32 @@
-# 文件转换
+# 文件工具
 
-在 File/Blob 与完整 Data URL 之间转换，适用于上传预览、读取图片处理结果，以及配合 [`download`](./download) 保存文件。
+格式化文件大小，在 File/Blob 与完整 Data URL 之间转换，适用于附件展示、上传预览、读取图片处理结果，以及配合 [`download`](./download) 保存文件。
+
+## formatFileSize
+
+```ts
+function formatFileSize(bytes: number): string
+```
+
+将字节数转换为易读的文件大小字符串，可直接传入 `File.size` 或 `Blob.size`。
+
+```ts
+import { formatFileSize } from '@xxkatt/utils'
+
+formatFileSize(0) // '0 B'
+formatFileSize(1023) // '1023 B'
+formatFileSize(1024) // '1 KB'
+formatFileSize(1536) // '1.5 KB'
+formatFileSize(1296039) // '1.24 MB'
+
+const file = new File([new Uint8Array(1536)], 'example.bin')
+formatFileSize(file.size) // '1.5 KB'
+```
+
+- 按 1024 进制换算，展示单位依次为 B、KB、MB、GB、TB、PB、EB；最大使用 EB，超过后继续以 EB 表示。
+- 最多保留两位小数，按 `Number.toFixed(2)` 舍入，并去掉末尾的零；舍入后达到 1024 时升至下一级单位，例如 `1048575` 显示为 `'1 MB'`。
+- 接受非负有限数值，包括小数字节；负数、`NaN` 和正负无穷大会抛出 `RangeError`。
+- 不依赖浏览器 API，可在 Node.js、浏览器、Web Worker 和 SSR 环境中使用。
 
 ## 基本用法
 

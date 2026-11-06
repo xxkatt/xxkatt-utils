@@ -1,5 +1,48 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { dataURLToBlob, download, fileToDataURL } from '@/index'
+import { dataURLToBlob, download, fileToDataURL, formatFileSize } from '@/index'
+
+describe('formatFileSize', () => {
+  it.each([
+    [0, '0 B'],
+    [-0, '0 B'],
+    [1, '1 B'],
+    [512, '512 B'],
+    [1023, '1023 B'],
+    [1024, '1 KB'],
+    [1536, '1.5 KB'],
+    [1024 ** 2, '1 MB'],
+    [1024 ** 3, '1 GB'],
+    [1024 ** 4, '1 TB'],
+    [1024 ** 5, '1 PB'],
+    [1024 ** 6, '1 EB'],
+    [1024 ** 7, '1024 EB'],
+    [1.234 * 1024 ** 2, '1.23 MB'],
+    [1.236 * 1024 ** 2, '1.24 MB'],
+    [0.5, '0.5 B'],
+  ])('将 %s 字节转换为 %s，最多保留两位小数并去掉末尾的零', (bytes, expected) => {
+    expect(formatFileSize(bytes)).toBe(expected)
+  })
+
+  it.each([
+    [1024 ** 2 - 6, '1023.99 KB'],
+    [1024 ** 2 - 1, '1 MB'],
+    [1024 ** 3 - 1, '1 GB'],
+  ])('舍入后达到 1024 时使用下一级单位：%s', (bytes, expected) => {
+    expect(formatFileSize(bytes)).toBe(expected)
+  })
+
+  it('可以直接格式化 File 和 Blob 的 size', () => {
+    const file = new File([new Uint8Array(1536)], 'example.bin')
+    const blob = new Blob([new Uint8Array(1024)])
+
+    expect(formatFileSize(file.size)).toBe('1.5 KB')
+    expect(formatFileSize(blob.size)).toBe('1 KB')
+  })
+
+  it.each([-1, NaN, Infinity, -Infinity])('拒绝负数和非有限数值：%s', (bytes) => {
+    expect(() => formatFileSize(bytes)).toThrow(RangeError)
+  })
+})
 
 function mockFileReader() {
   const reader = {

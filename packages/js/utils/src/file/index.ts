@@ -1,3 +1,25 @@
+/** 按 1024 进制格式化字节数，单位为 B 至 EB，最多保留两位小数。 */
+export function formatFileSize(bytes: number): string {
+  if (!Number.isFinite(bytes) || bytes < 0) {
+    throw new RangeError('bytes must be a non-negative finite number')
+  }
+
+  const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB']
+  let size = bytes
+  let index = 0
+  while (size >= 1024 && index < units.length - 1) {
+    size /= 1024
+    index++
+  }
+
+  let rounded = Number(size.toFixed(2))
+  if (rounded >= 1024 && index < units.length - 1) {
+    rounded = 1
+    index++
+  }
+  return `${rounded} ${units[index]}`
+}
+
 /** 将 File/Blob 异步读取为完整的 Base64 Data URL，需要 FileReader 支持。 */
 export async function fileToDataURL(file: Blob): Promise<string> {
   if (typeof FileReader === 'undefined') {
