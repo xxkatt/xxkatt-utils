@@ -29,3 +29,6 @@ export * from '@/url'
 
 // 树与列表转换、查找、筛选与映射
 export * from '@/tree'
+
+// 十进制四则运算、最大最小值、求和与平均数
+export * from '@/math'

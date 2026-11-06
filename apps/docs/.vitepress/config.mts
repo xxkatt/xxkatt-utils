@@ -35,6 +35,7 @@ export default defineConfig({
           { text: 'cookie', link: '/js/utils/cookie' },
           { text: 'URL', link: '/js/utils/url' },
           { text: 'Tree', link: '/js/utils/tree' },
+          { text: 'Math', link: '/js/utils/math' },
         ],
       },
     ],
